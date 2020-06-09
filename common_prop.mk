@@ -40,7 +40,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     vendor.audio.dolby.ds2.enabled=false \
     vendor.audio.dolby.ds2.hardbypass=false \
     vendor.audio.flac.sw.decoder.24bit=true \
-    vendor.audio_hal.period_size=192 \
+    vendor.audio_hal.period_size=240 \
     vendor.audio.hw.aac.encoder=true \
     vendor.audio.offload.buffer.size.kb=64 \
     vendor.audio.offload.gapless.enabled=true \
@@ -231,6 +231,19 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.oem_unlock_supported=1
 
+# Perf
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.extension_library=libqti-perfd-client.so \
+    ro.vendor.qti.sys.fw.bg_apps_limit=60 \
+    ro.vendor.at_library=libqti-at.so \
+    vendor.enable.prefetch=0 \
+    vendor.iop.enable_iop=1 \
+    vendor.iop.enable_uxe=1 \
+    vendor.iop.enable_prefetch_ofr=0 \
+    vendor.perf.gestureflingboost.enable=true \
+    vendor.perf.iop_v3.enable=true \
+    vendor.perf.iop_v3.enable.debug=false
+
 # Proximity
 PRODUCT_PROPERTY_OVERRIDES += \
     gsm.proximity.enable=true
@@ -240,8 +253,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.timed.enable=true \
     persist.vendor.cne.feature=1 \
     persist.vendor.dpm.feature=1 \
-    persist.vendor.qcomsysd.enabled=1 \
-    ro.vendor.extension_library=libqti-perfd-client.so
+    persist.vendor.dpm.nsrm.bkg.evt=3955 \
+    persist.vendor.qcomsysd.enabled=1
 
 # QTI
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
