@@ -61,7 +61,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Audio Feature
 PRODUCT_PROPERTY_OVERRIDES += \
-    vendor.audio.feature.a2dp_offload.enable=false \
     vendor.audio.feature.afe_proxy.enable=true \
     vendor.audio.feature.anc_headset.enable=true \
     vendor.audio.feature.audiozoom.enable=false \
@@ -113,13 +112,20 @@ endif
 
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.bluetooth.a2dp_offload.disabled=false \
-    persist.bluetooth.bluetooth_audio_hal.disabled=false \
-    persist.vendor.bt.a2dp_offload_cap=sbc-aac-aptx-aptxhd-ldac \
     persist.vendor.bt.aac_frm_ctl.enabled=true \
-    persist.vendor.qcom.bluetooth.enable.splita2dp=false \
+    persist.bluetooth.bluetooth_audio_hal.disabled=false \
     ro.vendor.bluetooth.wipower=false \
     vendor.qcom.bluetooth.soc=cherokee
+
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+    persist.vendor.bt.a2dp.aac_whitelist=false \
+    persist.vendor.qcom.bluetooth.enable.splita2dp=true \
+    persist.vendor.qcom.bluetooth.a2dp_offload_cap=sbc-aptx-aptxhd-aac-ldac \
+    persist.bluetooth.a2dp_offload.disabled=true \
+    ro.bluetooth.library_name=libbluetooth_qti.so \
+    ro.bluetooth.a2dp_offload.supported=true \
+    vendor.audio.feature.a2dp_offload.enable=true \
+    vendor.bluetooth.soc=cherokee
 
 # Camera
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -192,11 +198,17 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # LMKD
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.config.low_ram=false \
-    ro.lmk.kill_heaviest_task=true \
+    ro.lmk.low=1001 \
+    ro.lmk.medium=800 \
+    ro.lmk.critical=0 \
+    ro.lmk.critical_upgrade=false \
+    ro.lmk.upgrade_pressure=100 \
+    ro.lmk.downgrade_pressure=100 \
+    ro.lmk.kill_heaviest_task=true\
     ro.lmk.kill_timeout_ms=100 \
     ro.lmk.use_minfree_levels=true \
-    ro.lmk.log_stats=true
+    ro.lmk.log_stats=true \
+    ro.lmk.use_psi=false
 
 # Media
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -231,19 +243,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.oem_unlock_supported=1
 
-# Perf
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.extension_library=libqti-perfd-client.so \
-    ro.vendor.qti.sys.fw.bg_apps_limit=60 \
-    ro.vendor.at_library=libqti-at.so \
-    vendor.enable.prefetch=0 \
-    vendor.iop.enable_iop=1 \
-    vendor.iop.enable_uxe=1 \
-    vendor.iop.enable_prefetch_ofr=0 \
-    vendor.perf.gestureflingboost.enable=true \
-    vendor.perf.iop_v3.enable=true \
-    vendor.perf.iop_v3.enable.debug=false
-
 # Proximity
 PRODUCT_PROPERTY_OVERRIDES += \
     gsm.proximity.enable=true
@@ -254,7 +253,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.vendor.cne.feature=1 \
     persist.vendor.dpm.feature=1 \
     persist.vendor.dpm.nsrm.bkg.evt=3955 \
-    persist.vendor.qcomsysd.enabled=1
+    persist.vendor.qcomsysd.enabled=1 \
+    ro.vendor.extension_library=libqti-perfd-client.so
 
 # QTI
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -338,3 +338,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.debug.wfd.enable=1 \
     persist.sys.wfd.virtual=0
+
+# Zygote preforking
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.device_config.runtime_native.usap_pool_enabled=true

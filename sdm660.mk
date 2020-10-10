@@ -99,14 +99,16 @@ PRODUCT_PACKAGES += \
     libqcomvisualizer \
     libqcomvoiceprocessing \
     libvolumelistener \
-    tinymix.vendor
+    tinymix
 
 # Audio Configs
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/audio/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
     $(COMMON_PATH)/configs/audio/audio_output_policy.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_output_policy.conf \
-    $(COMMON_PATH)/configs/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
-    $(COMMON_PATH)/configs/audio/audio_policy_configuration_a2dp_offload_disabled.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration_a2dp_offload_disabled.xml \
+    $(COMMON_PATH)/configs/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/audio_policy_configuration.xml \
+    $(COMMON_PATH)/configs/audio/audio_policy_configuration_a2dp_offload_disabled.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    $(COMMON_PATH)/configs/audio/audio_policy_configuration_a2dp_offload_disabled_qti.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/audio_policy_configuration_a2dp_offload_disabled.xml \
+    $(COMMON_PATH)/configs/audio/bluetooth_qti_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_qti_audio_policy_configuration.xml \
     $(COMMON_PATH)/configs/audio/audio_tuning_mixer.txt:$(TARGET_COPY_OUT_VENDOR)/etc/audio_tuning_mixer.txt \
     $(COMMON_PATH)/configs/audio/graphite_ipc_platform_info.xml:$(TARGET_COPY_OUT_VENDOR)/etc/graphite_ipc_platform_info.xml \
     $(COMMON_PATH)/configs/audio/listen_platform_info.xml:$(TARGET_COPY_OUT_VENDOR)/etc/listen_platform_info.xml \
@@ -143,15 +145,18 @@ PRODUCT_PACKAGES += \
 
 # Bluetooth
 PRODUCT_PACKAGES += \
+    BluetoothQti \
     audio.bluetooth.default \
     android.hardware.bluetooth.audio@2.0-impl \
     liba2dpoffload \
+    libbtconfigstore \
     libbthost_if \
     libhdmiedid \
     libhfp \
     libldacBT_dec \
     libsndmonitor \
-    vendor.qti.hardware.bluetooth_audio@2.0.vendor
+    vendor.qti.hardware.bluetooth_audio@2.0.vendor \
+    vendor.qti.hardware.btconfigstore@1.0.vendor
 
 # Boot animation
 TARGET_BOOTANIMATION_SIZE := 1080p
@@ -296,15 +301,28 @@ PRODUCT_PACKAGES += \
     init.goodix.sh \
     init.msm.usb.configfs.rc \
     init.qcom.post_boot.sh \
+    init.qcom.early_boot.sh \
     init.qcom.rc \
     init.qcom.sh \
     init.qcom.usb.rc \
     init.qcom.usb.sh \
-    init.qti.fm.sh \
     init.recovery.qcom.rc \
     init.target.rc \
     init.xiaomi_parts.rc \
+    init.performance.sdm660.rc \
     ueventd.qcom.rc
+
+# FM
+ifeq ($(BOARD_HAVE_QCOM_FM),true)
+PRODUCT_PACKAGES += \
+    FM2 \
+    libqcomfm_jni \
+    qcom.fmradio \
+    qcom.fmradio.xml
+
+PRODUCT_BOOT_JARS += \
+    qcom.fmradio
+endif
 
 # Ion
 PRODUCT_PACKAGES += \
@@ -380,7 +398,16 @@ PRODUCT_PACKAGES += \
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(COMMON_PATH)/overlay \
-    $(COMMON_PATH)/overlay-lineage
+    $(COMMON_PATH)/overlay-lineage \
+    $(COMMON_PATH)/overlay-system
+
+# RRO configuration
+TARGET_USES_RRO := true
+PRODUCT_ENFORCE_RRO_TARGETS := *
+PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += \
+    $(COMMON_PATH)/overlay-lineage/lineage-sdk \
+    $(COMMON_PATH)/overlay-lineage/packages/apps/Snap \
+    $(COMMON_PATH)/overlay-system
 
 # Permissions
 PRODUCT_COPY_FILES += \

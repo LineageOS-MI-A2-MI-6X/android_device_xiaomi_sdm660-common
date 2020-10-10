@@ -57,6 +57,12 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := kryo
 
+# FM
+ifeq ($(BOARD_HAVE_QCOM_FM),true)
+AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
+BOARD_HAS_QCA_FM_SOC := cherokee
+endif
+
 # Audio
 AUDIO_FEATURE_ENABLED_EXTENDED_COMPRESS_FORMAT := true
 BOARD_USES_ALSA_AUDIO := true
@@ -67,9 +73,6 @@ AUDIO_USE_DEEP_AS_PRIMARY_OUTPUT := false
 AUDIO_FEATURE_ENABLED_KPI_OPTIMIZE := false
 AUDIO_DISABLE_SWAP_CHANNELS := true
 
-# Binder
-TARGET_USES_64_BIT_BINDER := true
-
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
@@ -79,6 +82,7 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(COMMON_PATH)/bluetooth
 QCOM_BT_USE_BTNV := true
 QCOM_BT_USE_SMD_TTY := true
 TARGET_USE_QTI_BT_STACK := true
+TARGET_FWK_SUPPORTS_FULL_VALUEADDS := true
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := sdm660
@@ -154,6 +158,7 @@ USE_DEVICE_SPECIFIC_IPACFG_MGR := true
 
 # Kernel
 BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200,n8 androidboot.console=ttyMSM0 earlycon=msm_serial_dm,0xc170000 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 sched_enable_hmp=1 sched_enable_power_aware=1 service_locator.enable=1 swiotlb=1 androidboot.configfs=true androidboot.usbcontroller=a800000.dwc3
+BOARD_KERNEL_CMDLINE += usbcore.autosuspend=7
 BOARD_KERNEL_CMDLINE += loop.max_part=16
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
@@ -217,6 +222,8 @@ ifneq ($(filter lavender,$(TARGET_DEVICE)),)
 TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab_A.qcom
 else ifeq ($(ENABLE_AB), true)
 TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab_AB.qcom
+else ifeq ($(ENABLE_ENCRYPTION), true)
+TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab_FE.qcom
 else
 TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab.qcom
 endif
